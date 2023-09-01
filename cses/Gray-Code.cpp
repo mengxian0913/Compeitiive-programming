@@ -1,8 +1,8 @@
 /*********************************************************
 # File Name: a.cpp
-# Author: Vincent Yang
+# Author: Vincent
 # Mail: mengxian0913@gmail.com
-# Created Time: 五  8/11 19:19:05 2023
+# Created Time: 五  9/ 1 00:59:30 2023
 *********************************************************/
 
 #pragma GCC optimize("O3")
@@ -15,10 +15,23 @@ using namespace std;
 #define INF 0x7FFFFFFF
 #define pb push_back
 #define all(aa) aa.begin(),aa.end()
-#define MOD 1e9+7
+#define MOD (int)(1e9+7)
 
 void solve(){
+    int n;
+    cin >> n;
 
+    for(int i=0; i < (1 << n); i++){
+        int val = i ^ (i >> 1);
+        bitset<32> bs(val);
+        string ss = bs.to_string();
+        for(int i=32-n; i<32; i++){
+            cout << ss[i];
+        }
+        cout << "\n";
+    }
+
+    return;
 }
 
 signed main(){
