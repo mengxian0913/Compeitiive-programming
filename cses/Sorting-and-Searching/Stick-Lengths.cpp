@@ -2,7 +2,7 @@
 # File Name: a.cpp
 # Author: Vincent
 # Mail: mengxian0913@gmail.com
-# Created Time: 三 10/18 02:46:31 2023
+# Created Time: 六 10/21 19:04:12 2023
 *********************************************************/
 
 #pragma GCC optimize("O3")
@@ -17,33 +17,21 @@ using namespace std;
 #define all(aa) aa.begin(),aa.end()
 #define MOD (int)(1e9+7)
 
-bool cmp(pair<int, int>a, pair<int, int>b) {
-  if(a.ss != b.ss) {
-    return a.ss < b.ss;
-  }
-  return false;
-}
-
 void solve(){
-  int n, s, e;
+  int n;
   cin >> n;
-  vector<pair<int, int>> line;
-  for(int i=0; i<n; i++) {
-    cin >> s >> e;
-    line.pb({s, e});
+  vector<int> arr(n);
+  for(int &i : arr) {
+    cin >> i;
+  }
+  sort(all(arr));
+  int mid_val = arr[n / 2], tot = 0;
+
+  for(int i : arr) {
+    tot += abs(i - mid_val);
   }
 
-  sort(all(line), cmp);
-
-  int now = line[0].ss, ans = 1;
-  for(int i = 1; i < n; i++) {
-    if(line[i].ff >= now) {
-      now = line[i].ss;
-      ans++;
-    }
-  }
-
-  cout << ans << "\n";
+  cout << tot << "\n";
 
   return;
 }

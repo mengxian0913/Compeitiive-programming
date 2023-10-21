@@ -2,7 +2,7 @@
 # File Name: a.cpp
 # Author: Vincent
 # Mail: mengxian0913@gmail.com
-# Created Time: 三 10/18 02:46:31 2023
+# Created Time: 五 10/20 11:28:36 2023
 *********************************************************/
 
 #pragma GCC optimize("O3")
@@ -18,18 +18,27 @@ using namespace std;
 #define MOD (int)(1e9+7)
 
 void solve(){
-  int n, s, e;
-  cin >> n;
-  vector<pair<int, int>> line;
+  int n, m;
+  cin >> n >> m;
+  map<int, int> mp;
+  vector<int> arr(n);
+  bool ch = false;
   for(int i=0; i<n; i++) {
-    cin >> s >> e;
-    line.pb({s, e});
+    cin >> arr[i];
+    if(mp.count(m-arr[i]) == true) {
+      cout << mp[m-arr[i]] + 1 << " " << i + 1 << "\n";
+      ch = true;
+      break;
+    }
+    
+    else {
+      mp[arr[i]] = i;
+    }
   }
 
-  sort(all(line));
-
-
-
+  if(!ch) {
+    cout << "IMPOSSIBLE\n";
+  }
   return;
 }
 
