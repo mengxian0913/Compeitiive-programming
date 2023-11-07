@@ -1,99 +1,153 @@
-/********************************************************
-# File Name: a.cpp
-# Author: Vincent
-# Mail: mengxian0913@gmail.com
-# Created Time: 四  9/21 11:14:34 2023
-*********************************************************/
-
-#pragma GCC optimize("O3")
 #include <bits/stdc++.h>
+#define lli long long int
+#define li long int
+#define ld long double
 using namespace std;
-#define int long long
-#define ff first
-#define ss second
-#define fastIO cin.tie(nullptr)->sync_with_stdio(false);
-#define INF 0x7FFFFFFF
-#define pb push_back
-#define all(aa) aa.begin(),aa.end()
-#define MOD (int)(1e9+7)
+const lli mod = 1e9 + 7;
+const int n = 7;
+bool visited[n][n];
+int reserved[49];
 
-map<char, int> mp;
-int mv_x[] = {0, 0, 1, -1};
-int mv_y[] = {1, -1, 0, 0};
-const int MAXN = 10;
-int vis[MAXN][MAXN];
-int ans;
-string ss;
-
-bool check_side(int cur_x, int cur_y){
-   if(cur_x <= 0 || cur_x > 7 || cur_y <= 0 || cur_y > 7){
-        return false;
-    } 
-
-    return true;
-}
-
-void dfs(int x, int y, int depth){
-
-
-    if(x == 1 && y == 7){
-        // cout << depth << "\n";
-        if(depth >= ss.size()){
-            cout << "great!\n";
-            ans++;
-        }
+void move(int r, int c, int &ans, int &steps)
+{
+    if (r == n - 1 && c == 0)
+    {
+        ans += (steps == n * n - 1);
         return;
     }
 
-    if(depth >= ss.size()){
+    // if you hit a wall or a path (can only go left or right); return
+    if (((r + 1 == n || (visited[r - 1][c] && visited[r + 1][c])) && c - 1 >= 0 && c + 1 < n && !visited[r][c - 1] && !visited[r][c + 1]) ||
+        ((c + 1 == n || (visited[r][c - 1] && visited[r][c + 1])) && r - 1 >= 0 && r + 1 < n && !visited[r - 1][c] && !visited[r + 1][c]) ||
+        ((r == 0 || (visited[r + 1][c] && visited[r - 1][c])) && c - 1 >= 0 && c + 1 < n && !visited[r][c - 1] && !visited[r][c + 1]) ||
+        ((c == 0 || (visited[r][c + 1] && visited[r][c - 1])) && r - 1 >= 0 && r + 1 < n && !visited[r - 1][c] && !visited[r + 1][c]))
         return;
-    }
 
-    // cout << x << " " << y << " " << depth << " " << ss[depth] << "\n";
-    
-    if(ss[depth] != '?'){
-        int ind = mp[ss[depth]];
+    visited[r][c] = true;
 
-        int cur_x = x + mv_x[ind];
-        int cur_y = y + mv_y[ind];
-        if(vis[cur_x][cur_y] == 0 && check_side(cur_x, cur_y)){
-            vis[cur_x][cur_y] = 1;
-            dfs(cur_x, cur_y, depth + 1);
-            vis[cur_x][cur_y] = 0;
-        }
-    }
-
-    else{
-        for(int i=0;i<4;i++){
-            int cur_x = x + mv_x[i];
-            int cur_y = y + mv_y[i];
-            if(vis[cur_x][cur_y] == 0 && check_side(cur_x, cur_y)){
-                vis[cur_x][cur_y] = 1;
-                dfs(cur_x, cur_y, depth + 1);
-                vis[cur_x][cur_y] = 0;
+    if (reserved[steps] != -1)
+    {
+        switch (reserved[steps])
+        {
+        case 0:
+            if (r - 1 >= 0)
+            {
+                if (!visited[r - 1][c])
+                {
+                    steps++;
+                    move(r - 1, c, ans, steps);
+                    steps--;
+                }
             }
+            break;
+
+        case 1:
+            if (c + 1 < n)
+            {
+                if (!visited[r][c + 1])
+                {
+                    steps++;
+                    move(r, c + 1, ans, steps);
+                    steps--;
+                }
+            }
+            break;
+
+        case 2:
+            if (r + 1 < n)
+            {
+                if (!visited[r + 1][c])
+                {
+                    steps++;
+                    move(r + 1, c, ans, steps);
+                    steps--;
+                }
+            }
+            break;
+
+        case 3:
+            if (c - 1 >= 0)
+            {
+                if (!visited[r][c - 1])
+                {
+                    steps++;
+                    move(r, c - 1, ans, steps);
+                    steps--;
+                }
+            }
+            break;
+        }
+        visited[r][c] = false;
+        return;
+    }
+
+    // move down
+    if (r + 1 < n)
+    {
+        if (!visited[r + 1][c])
+        {
+            steps++;
+            move(r + 1, c, ans, steps);
+            steps--;
         }
     }
 
-    return;
+    // move right
+    if (c + 1 < n)
+    {
+        if (!visited[r][c + 1])
+        {
+            steps++;
+            move(r, c + 1, ans, steps);
+            steps--;
+        }
+    }
+
+    // move up
+    if (r - 1 >= 0)
+    {
+        if (!visited[r - 1][c])
+        {
+            steps++;
+            move(r - 1, c, ans, steps);
+            steps--;
+        }
+    }
+
+    // move left
+    if (c - 1 >= 0)
+    {
+        if (!visited[r][c - 1])
+        {
+            steps++;
+            move(r, c - 1, ans, steps);
+            steps--;
+        }
+    }
+    visited[r][c] = false;
 }
 
-void solve(){
-    memset(vis, 0, sizeof(vis));
-    ans = 0;
-    cin >> ss;
-    // cout << "size: " << ss.size() << '\n';
-    vis[1][1] = 1;
-    dfs(1, 1, 0);    
-    cout << ans << "\n";
-}
-
-signed main(){
-    fastIO
-    mp['R'] = 2;
-    mp['L'] = 3;
-    mp['U'] = 0;
-    mp['D'] = 1;
-    solve();
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    string path;
+    cin >> path;
+    for (int i = 0; i < path.length(); i++)
+    {
+        if (path[i] == '?')
+            reserved[i] = -1;
+        else if (path[i] == 'U')
+            reserved[i] = 0;
+        else if (path[i] == 'R')
+            reserved[i] = 1;
+        else if (path[i] == 'D')
+            reserved[i] = 2;
+        else if (path[i] == 'L')
+            reserved[i] = 3;
+    }
+    int ans = 0, steps = 0;
+    move(0, 0, ans, steps);
+    cout << ans;
     return 0;
 }

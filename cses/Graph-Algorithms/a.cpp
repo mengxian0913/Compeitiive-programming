@@ -2,7 +2,7 @@
 # File Name: a.cpp
 # Author: Vincent
 # Mail: mengxian0913@gmail.com
-# Created Time: 五 10/20 17:13:57 2023
+# Created Time: 四 11/ 2 16:20:29 2023
 *********************************************************/
 
 #pragma GCC optimize("O3")
@@ -16,64 +16,49 @@ using namespace std;
 #define pb push_back
 #define all(aa) aa.begin(),aa.end()
 #define MOD (int)(1e9+7)
-#define MAXN 1005
+#define MAXN (int)(1010)
 
-int n, m;
-int vis[MAXN][MAXN];
+int steps[MAXN][MAXN];
+bool vis[MAXN][MAXN];
+
 string mp[MAXN];
 
-int mv_y[] = {0, 0, 1, -1};
-int mv_x[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
+int dx[] = {1, -1, 0, 0};
 
 bool check(int y, int x) {
-  if(y < 0 || y >= n || x < 0 || x >= m) {
-    return false;
-  }
-
-  return (vis[y][x] ^ 1);
+  if(y < 0 || x < 0 || y >= n || x >= m || vis[y][x] == true) {
+    return 0;
+  } 
+  return 1;
 }
 
 void dfs(int y, int x) {
-  for(int i = 0; i < 4; i++) {
-    int now_y = y + mv_y[i];
-    int now_x = x + mv_x[i];
-    if(check(now_y, now_x)) {
-      vis[now_y][now_x] = true;
-      dfs(now_y, now_x);
-    }
+  if(mp[y][x] == 'B') {
+    return 1;
   }
-  return;
+
+  int MIN = INF;
+  
+  for(int i = 0; i < 4; i++) {
+    int cur_y = y + dy[i];
+    int cur_x  = x + dx[i];
+    
+    if(check(cur_y, cur_x)) {
+      vis[y][x] = true;
+      steps[y][x] = min(steps[y][x], dfs(cur_y, cur_x));
+      vis[y][x] = false;
+
+    }
+
+  }
 }
 
-
-void solve(){  
-  memset(vis, 0, sizeof(vis));
+void solve(){
+  memset(steps, 0, sizeof(steps));
+  int n, m;
   cin >> n >> m;
-  for(int i = 0; i < n; i++) {
-    cin >> mp[i];
-  }
 
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      if(mp[i][j] == '#') {
-        vis[i][j] = true;
-      }
-    }
-  }
-
-  int ans = 0;
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      if(!vis[i][j]) {
-        ans++;
-        vis[i][j] = true;
-        dfs(i, j);
-      }
-    }
-  }
-
-  cout << ans << "\n";
-  return;
 }
 
 signed main(){
