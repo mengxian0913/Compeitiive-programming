@@ -1,8 +1,8 @@
 /*********************************************************
 # File Name: a.cpp
-# Author: Vincent Yang
+# Author: Vincent
 # Mail: mengxian0913@gmail.com
-# Created Time: 五  8/11 19:19:05 2023
+# Created Time: 三 11/15 18:04:34 2023
 *********************************************************/
 
 #pragma GCC optimize("O3")
@@ -15,14 +15,20 @@ using namespace std;
 #define INF 0x7FFFFFFF
 #define pb push_back
 #define all(aa) aa.begin(),aa.end()
-#define MOD 1e9+7
+#define MOD (int)(1e9+7)
 
 void solve(){
-
+  double n, r, d;
+  cin >> n >> r >> d;
+  n -= r;
+  double val = r - d;
+  int ans = n / val;
+  cout << ans + (n / val == (int)(n / val) * 1.0) << "\n";
+  return;
 }
 
 signed main(){
-    fastIO
-    solve();
-    return 0;
+  fastIO
+  solve();
+  return 0;
 }
