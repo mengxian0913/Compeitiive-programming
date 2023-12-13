@@ -1,0 +1,29 @@
+int now = dfs(curY, curX);
+
+if(now < dp[y][x].ff) {
+  dp[y][x].ff;
+}
+
+
+//////////////////////
+
+進到遞迴函式後
+
+if(mp[y][x] == 'B') {
+  return {1, 'B'};
+}
+
+if(dp[y][x].ff != MAX) {
+  pair<int, char> now = dfs(curY, curX);
+  if(now.ff < dp[y][x].ff) {
+    dp[y][x] = now;
+    dp[y][x].ff += 1;
+    return dp[y][x];
+  }
+} else {
+  return dp[y][x];
+}
+
+pair<int, char> dp[MAXN][MAXN];
+
+
