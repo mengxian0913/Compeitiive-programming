@@ -16,24 +16,48 @@ using namespace std;
 #define pb push_back
 #define all(aa) aa.begin(),aa.end()
 #define MOD (int)(1e9+7)
+#define MAXN (int)(2e5+10)
+
+int n;
+bool vis[MAXN];
+vector<int> ans;
+
+void dfs(int now, int depth) {
+  if(ans.size() == 5) {
+    return;
+  }
+
+  if(vis[now]) {
+    cout << "now: " << now << "\n";
+    now = (now + 1 > n ? 1 : now + 1);
+    dfs(now, depth);
+  }
+
+  if(depth == 0) {
+    vis[now] = 1;
+    ans.pb(now);
+    depth = 1;
+    now = (now + 1 > n ? 1 : now + 1);
+    dfs(now, depth);
+  }
+
+  depth--;
+  dfs((now + 1 > n ? 1 : now + 1), depth);
+  return;
+}
 
 void solve(){
-  int n, tmp = 0;
   cin >> n;
-  vector<int> arr(n);
-  for(int &i : arr) {
-    cin >> i;
+  dfs(2, 0);
+  for(int i : ans) {
+    cout << i << " ";
   }
-  
-  map<int, int> mp;
-
-  for(int i : arr) {
-    
-  }
-
+  cout << "\n";
+  return;
 }
 
 signed main(){
+  memset(vis, false, sizeof(vis));
   fastIO
   solve();
   return 0;
